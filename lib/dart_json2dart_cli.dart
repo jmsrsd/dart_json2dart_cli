@@ -1,4 +1,5 @@
 import 'src/core/parse_node.dart';
+import 'src/core/print_node.dart';
 
 Future<void> execute(List<String> arguments) async {
   // for (final argument in arguments) {
@@ -54,26 +55,5 @@ Future<void> execute(List<String> arguments) async {
 
   final node = ParseNode.root(json);
 
-  final writing = node.classes
-      .map((e) {
-        return [...e.writer.write(), ''];
-      })
-      .expand((e) => e)
-      .toList()
-      .asMap()
-      .entries
-      .toList()
-      .where((e) {
-        if (e.key == 0) {
-          return true;
-        }
-
-        return e.value.contains(r"import '") == false;
-      })
-      .map((e) => e.value)
-      .toList();
-
-  for (final line in writing) {
-    print(line);
-  }
+  print(PrintNode.of(node));
 }
