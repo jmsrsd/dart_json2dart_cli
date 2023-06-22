@@ -1,13 +1,14 @@
 import 'dart:convert';
 
-String prettify(jsonString) {
-  var jsonObject = jsonDecode(jsonString);
+String prettify(String jsonString) {
+  final jsonObject = jsonDecode(jsonString);
+
   String prettyString = _prettify(jsonObject);
 
   return prettyString;
 }
 
-String _prettify(jsonObject, {int indent = 0}) {
+String _prettify(dynamic jsonObject, {int indent = 0}) {
   String prettyString = "";
   if (jsonObject is Map) {
     prettyString += "{\n";

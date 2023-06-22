@@ -2,7 +2,9 @@ import 'dart:convert';
 
 Map<String, dynamic>? serialize(dynamic json) {
   try {
-    final serialized = jsonDecode(jsonEncode(json)) as Map;
+    json = json is String ? json : jsonEncode(json);
+
+    final serialized = jsonDecode(json) as Map;
 
     final entries = serialized.entries.map((e) {
       return MapEntry('${e.key}', e.value);

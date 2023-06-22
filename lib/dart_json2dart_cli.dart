@@ -1,5 +1,4 @@
-import 'src/core/parse_node.dart';
-import 'src/core/print_node.dart';
+import 'src/core/json/json_node.dart';
 
 Future<void> execute(List<String> arguments) async {
   // for (final argument in arguments) {
@@ -53,7 +52,7 @@ Future<void> execute(List<String> arguments) async {
     ],
   };
 
-  final node = ParseNode.root(json);
+  final node = JsonNode.parse(r'Root$', json);
 
-  print(PrintNode.of(node));
+  print(node);
 }
