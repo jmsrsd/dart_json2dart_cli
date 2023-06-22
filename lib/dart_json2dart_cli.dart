@@ -1,4 +1,4 @@
-import 'src/prop_node.dart';
+import 'src/core/parse_node.dart';
 
 Future<void> execute(List<String> arguments) async {
   // for (final argument in arguments) {
@@ -43,15 +43,35 @@ Future<void> execute(List<String> arguments) async {
       "clock_out": null
     },
     "clock_in_flag": false,
-    "clock_out_flag": false
+    "clock_out_flag": false,
+    "ids": [123, 456, 789],
+    "employees": [
+      {
+        "fullname": "Budi Budianto",
+      }
+    ],
   };
 
-  final node = PropNode.parse(
-    json,
-    sourceName: null,
-    parent: null,
-    elements: null,
-  );
+  final node = ParseNode.root(json);
 
-  print(node);
+  final writing = node.classes
+      .map((e) => [...e.writer.write(), ''])
+      .expand((e) => e)
+      .toList()
+      .asMap()
+      .entries
+      .toList()
+      .where((e) {
+        if (e.key == 0) {
+          return true;
+        }
+
+        return e.value.contains(r"import '") == false;
+      })
+      .map((e) => e.value)
+      .toList();
+
+  for (final line in writing) {
+    print(line);
+  }
 }
