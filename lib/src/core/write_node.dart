@@ -6,14 +6,24 @@ import 'parse_node_type.dart';
 
 class WriteNode extends Equatable {
   final ParseNode node;
+  final WriteNode? parent;
 
-  WriteNode.of(this.node);
+  WriteNode.of(this.node, [this.parent]);
 
   String get name {
-    final result = node.name ?? r'Root$';
-    return node.type == ParseNodeType.object
-        ? result.pascalCase
-        : result.camelCase;
+    if (parent == null) {
+      final result = node.name ?? r'Root$';
+
+      return node.type == ParseNodeType.object
+          ? result.pascalCase
+          : result.camelCase;
+    }
+
+    if (node.type == ParseNodeType.object) {
+      return '${parent?.name.pascalCase}${node.name?.pascalCase}';
+    }
+
+    return '${node.name?.camelCase}';
   }
 
   String get asClassProperty {
@@ -41,6 +51,37 @@ class WriteNode extends Equatable {
 
   String get asConstructorArgument {
     return 'required this.${name.camelCase},';
+  }
+
+  String get asCopyWitArgument {
+    final type = node.type;
+
+    switch (type) {
+      case ParseNodeType.object:
+        return '$name? ${name.camelCase},';
+      case ParseNodeType.array:
+        final child = node.children.first;
+        final childType = child.type == ParseNodeType.object
+            ? WriteNode.of(child).name
+            : child.type.label;
+
+        return 'List<$childType>? ${name.camelCase},';
+      default:
+        break;
+    }
+
+    final isDynamic = node.type == ParseNodeType.unknown;
+
+    var datatype = node.type.label;
+
+    datatype = isDynamic ? datatype : '$datatype?';
+
+    return '$datatype ${name.camelCase},';
+  }
+
+  String get asCopyWithProperty {
+    final property = name.camelCase;
+    return '$property: $property ?? this.$property,';
   }
 
   String get asFromJsonProperty {
@@ -141,6 +182,17 @@ class WriteNode extends Equatable {
           ...children.map((e) => '      ${e.asToJsonProperty}').toList(),
           '    };',
           '  }',
+          '  ',
+          '  $name copyWith({',
+          ...children.map((e) => '    ${e.asCopyWitArgument}').toList(),
+          '  }) {',
+          '    return $name(',
+          ...children.map((e) => '      ${e.asCopyWithProperty}').toList(),
+          '    );',
+          '  }',
+          '  ',
+          '  @override',
+          '  bool get stringify => true;',
           '  ',
           '  @override',
           '  List<Object?> get props {',

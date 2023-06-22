@@ -48,6 +48,31 @@ class Root$ extends Equatable {
     };
   }
 
+  Root$ copyWith({
+    String? code,
+    String? message,
+    Data? data,
+    Alt? alt,
+    bool? clockInFlag,
+    bool? clockOutFlag,
+    List<int>? ids,
+    List<Employee>? employees,
+  }) {
+    return Root$(
+      code: code ?? this.code,
+      message: message ?? this.message,
+      data: data ?? this.data,
+      alt: alt ?? this.alt,
+      clockInFlag: clockInFlag ?? this.clockInFlag,
+      clockOutFlag: clockOutFlag ?? this.clockOutFlag,
+      ids: ids ?? this.ids,
+      employees: employees ?? this.employees,
+    );
+  }
+
+  @override
+  bool get stringify => true;
+
   @override
   List<Object?> get props {
     return [
@@ -137,6 +162,45 @@ class Data extends Equatable {
       "clock_out": clockOut,
     };
   }
+
+  Data copyWith({
+    DateTime? insertDate,
+    dynamic insertUser,
+    DateTime? updateDate,
+    dynamic updateUser,
+    dynamic deleteFlag,
+    dynamic deleteDate,
+    dynamic deleteUser,
+    int? activeFlg,
+    int? attendanceId,
+    int? shiftId,
+    int? employeeId,
+    bool? isNextDay,
+    bool? isClosed,
+    DateTime? clockIn,
+    dynamic clockOut,
+  }) {
+    return Data(
+      insertDate: insertDate ?? this.insertDate,
+      insertUser: insertUser ?? this.insertUser,
+      updateDate: updateDate ?? this.updateDate,
+      updateUser: updateUser ?? this.updateUser,
+      deleteFlag: deleteFlag ?? this.deleteFlag,
+      deleteDate: deleteDate ?? this.deleteDate,
+      deleteUser: deleteUser ?? this.deleteUser,
+      activeFlg: activeFlg ?? this.activeFlg,
+      attendanceId: attendanceId ?? this.attendanceId,
+      shiftId: shiftId ?? this.shiftId,
+      employeeId: employeeId ?? this.employeeId,
+      isNextDay: isNextDay ?? this.isNextDay,
+      isClosed: isClosed ?? this.isClosed,
+      clockIn: clockIn ?? this.clockIn,
+      clockOut: clockOut ?? this.clockOut,
+    );
+  }
+
+  @override
+  bool get stringify => true;
 
   @override
   List<Object?> get props {
@@ -235,6 +299,45 @@ class Alt extends Equatable {
     };
   }
 
+  Alt copyWith({
+    DateTime? insertDate,
+    dynamic insertUser,
+    DateTime? updateDate,
+    dynamic updateUser,
+    dynamic deleteFlag,
+    dynamic deleteDate,
+    dynamic deleteUser,
+    int? activeFlg,
+    int? attendanceId,
+    int? shiftId,
+    int? employeeId,
+    bool? isNextDay,
+    bool? isClosed,
+    DateTime? clockIn,
+    dynamic clockOut,
+  }) {
+    return Alt(
+      insertDate: insertDate ?? this.insertDate,
+      insertUser: insertUser ?? this.insertUser,
+      updateDate: updateDate ?? this.updateDate,
+      updateUser: updateUser ?? this.updateUser,
+      deleteFlag: deleteFlag ?? this.deleteFlag,
+      deleteDate: deleteDate ?? this.deleteDate,
+      deleteUser: deleteUser ?? this.deleteUser,
+      activeFlg: activeFlg ?? this.activeFlg,
+      attendanceId: attendanceId ?? this.attendanceId,
+      shiftId: shiftId ?? this.shiftId,
+      employeeId: employeeId ?? this.employeeId,
+      isNextDay: isNextDay ?? this.isNextDay,
+      isClosed: isClosed ?? this.isClosed,
+      clockIn: clockIn ?? this.clockIn,
+      clockOut: clockOut ?? this.clockOut,
+    );
+  }
+
+  @override
+  bool get stringify => true;
+
   @override
   List<Object?> get props {
     return [
@@ -275,6 +378,17 @@ class Employee extends Equatable {
       "fullname": fullname,
     };
   }
+
+  Employee copyWith({
+    String? fullname,
+  }) {
+    return Employee(
+      fullname: fullname ?? this.fullname,
+    );
+  }
+
+  @override
+  bool get stringify => true;
 
   @override
   List<Object?> get props {

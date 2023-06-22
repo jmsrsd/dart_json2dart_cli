@@ -6,6 +6,7 @@ import '../util/prettify.dart';
 import '../util/pluralize/pluralize.dart';
 import 'parse_node_type.dart';
 import 'write_node.dart';
+import 'package:recase/recase.dart';
 
 class ParseNode extends Equatable {
   final dynamic json;
@@ -47,7 +48,18 @@ class ParseNode extends Equatable {
     return elements.where((e) {
       return e.type == ParseNodeType.object;
     }).map((e) {
-      return ParseNode.root(e.json, name: e.name);
+      final parent = e.parent;
+
+      final parentName = parent?.type == ParseNodeType.object
+          ? parent?.name?.pascalCase ?? r'Root$'
+          : '';
+
+      final name = '$parentName${e.name?.pascalCase ?? r'Root$'}';
+
+      return ParseNode.root(
+        e.json,
+        name: name,
+      );
     }).toList();
   }
 
@@ -176,10 +188,13 @@ class ParseNode extends Equatable {
 
   @override
   List<Object?> get props {
-    return [
-      name,
-      type,
-      ...children.map((e) => e.props).expand((e) => e).toList(),
+    final result = [
+      '$name:${type.name}',
+      ...children.map((e) => '${e.name}:${e.type.name}').toList(),
     ];
+
+    print(result);
+
+    return result;
   }
 }

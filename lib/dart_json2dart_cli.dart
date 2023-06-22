@@ -55,7 +55,9 @@ Future<void> execute(List<String> arguments) async {
   final node = ParseNode.root(json);
 
   final writing = node.classes
-      .map((e) => [...e.writer.write(), ''])
+      .map((e) {
+        return [...e.writer.write(), ''];
+      })
       .expand((e) => e)
       .toList()
       .asMap()
