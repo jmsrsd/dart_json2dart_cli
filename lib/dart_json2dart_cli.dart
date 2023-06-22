@@ -1,117 +1,57 @@
-import 'package:dart_json2dart_cli/src/core.dart';
+import 'src/prop_node.dart';
 
 Future<void> execute(List<String> arguments) async {
-  for (final argument in arguments) {
-    print(argument);
-  }
+  // for (final argument in arguments) {
+  //   print(argument);
+  // }
 
   final json = {
-    "by": "dhouston",
-    "descendants": 71,
-    "id": 8863,
-    "kids": {
-      "elements": [
-        8952,
-        9224,
-        8917,
-        8884,
-        8887,
-        8943,
-        8869,
-        8958,
-        9005,
-        9671,
-        8940,
-        9067,
-        8908,
-        9055,
-        8865,
-        8881,
-        8872,
-        8873,
-        8955,
-        10403,
-        8903,
-        8928,
-        9125,
-        8998,
-        8901,
-        8902,
-        8907,
-        8894,
-        8878,
-        8870,
-        8980,
-        8934,
-        8876
-      ],
+    "code": "0",
+    "message": "Success",
+    "data": {
+      "insert_date": "2023-06-19T12:18:30.519Z",
+      "insert_user": null,
+      "update_date": "2023-06-20T07:13:56.285Z",
+      "update_user": null,
+      "delete_flag": null,
+      "delete_date": null,
+      "delete_user": null,
+      "active_flg": 1,
+      "attendance_id": 36,
+      "shift_id": 14,
+      "employee_id": 1212,
+      "isNextDay": true,
+      "isClosed": false,
+      "clock_in": "2023-06-19T12:18:30.519Z",
+      "clock_out": null
     },
-    "parent": [
-      {
-        "lorem_ipsum": "foo_bar",
-      },
-    ],
-    "score": 111,
-    "time": 1175714200,
-    "title": "My YC app: Dropbox - Throw away your USB drive",
-    "type": "story",
-    "url": "http://www.getdropbox.com/u/2/screencast.html"
+    "alt": {
+      "insert_date": "2023-06-19T12:18:30.519Z",
+      "insert_user": null,
+      "update_date": "2023-06-20T07:13:56.285Z",
+      "update_user": null,
+      "delete_flag": null,
+      "delete_date": null,
+      "delete_user": null,
+      "active_flg": 1,
+      "attendance_id": 36,
+      "shift_id": 14,
+      "employee_id": 1212,
+      "isNextDay": true,
+      "isClosed": false,
+      "clock_in": "2023-06-19T12:18:30.519Z",
+      "clock_out": null
+    },
+    "clock_in_flag": false,
+    "clock_out_flag": false
   };
 
-  // print(jsonEncode(json));
-  // print('');
-  // print('---');
-  // print('');
+  final node = PropNode.parse(
+    json,
+    sourceName: null,
+    parent: null,
+    elements: null,
+  );
 
-  final token = tokenize(json);
-
-  convert(token);
-
-  print(classes.entries.toList().reversed.map((e) {
-    var lines = e.value.split('\n');
-
-    final constructor = createConstructor(e.key, e.value);
-
-    lines = [
-      ...lines.sublist(0, lines.length - 1),
-      '',
-      ...constructor.split('\n').map((e) {
-        return '  $e';
-      }),
-      '}',
-    ];
-
-    final copyWith = createCopyWith(e.key, e.value);
-
-    lines = [
-      ...lines.sublist(0, lines.length - 1),
-      '',
-      ...copyWith.split('\n').map((e) {
-        return '  $e';
-      }),
-      '}',
-    ];
-
-    final toJson = createToJsonFactory(e.key, e.value);
-
-    lines = [
-      ...lines.sublist(0, lines.length - 1),
-      '',
-      ...toJson.split('\n').map((e) {
-        return '  $e';
-      }),
-      '}',
-    ];
-
-    final fromJson = createFromJsonFactory(e.key, e.value);
-
-    return [
-      ...lines.sublist(0, lines.length - 1),
-      '',
-      ...fromJson.split('\n').map((e) {
-        return '  $e';
-      }),
-      '}',
-    ].join('\n');
-  }).join('\n\n'));
+  print(node);
 }
