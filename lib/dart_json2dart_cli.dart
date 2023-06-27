@@ -1,4 +1,9 @@
-import 'src/core/json/json_node.dart';
+import 'dart:convert';
+
+import 'src/core/json_mapper.dart';
+import 'src/core/json_node.dart';
+import 'src/dummy.dart';
+import 'src/util/prettify.dart';
 
 Future<void> execute(List<String> arguments) async {
   // for (final argument in arguments) {
@@ -52,7 +57,11 @@ Future<void> execute(List<String> arguments) async {
     ],
   };
 
-  final node = JsonNode.parse(r'Root$', json);
+  final node = JsonNode.root(json);
 
-  print(node);
+  final mapper = JsonMapper.of(node);
+
+  print(mapper.code);
+
+  // print(prettify(jsonEncode(Dummy.fromJson(json).toJson())));
 }

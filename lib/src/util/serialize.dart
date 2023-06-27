@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-Map<String, dynamic>? serialize(dynamic json) {
+Map<String, dynamic> serialize(dynamic json) {
   try {
     json = json is String ? json : jsonEncode(json);
 
@@ -12,6 +12,6 @@ Map<String, dynamic>? serialize(dynamic json) {
 
     return Map.fromEntries(entries);
   } catch (e) {
-    return null;
+    return {};
   }
 }

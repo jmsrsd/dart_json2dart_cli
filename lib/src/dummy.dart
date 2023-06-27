@@ -1,16 +1,68 @@
 import 'package:equatable/equatable.dart';
 
-class Root$ extends Equatable {
+/// Example:
+///
+/// {
+///   "code": "0",
+///   "message": "Success",
+///   "data": {
+///     "insert_date": "2023-06-19T12:18:30.519Z",
+///     "insert_user": null,
+///     "update_date": "2023-06-20T07:13:56.285Z",
+///     "update_user": null,
+///     "delete_flag": null,
+///     "delete_date": null,
+///     "delete_user": null,
+///     "active_flg": 1,
+///     "attendance_id": 36,
+///     "shift_id": 14,
+///     "employee_id": 1212,
+///     "isNextDay": true,
+///     "isClosed": false,
+///     "clock_in": "2023-06-19T12:18:30.519Z",
+///     "clock_out": null
+///   },
+///   "alt": {
+///     "insert_date": "2023-06-19T12:18:30.519Z",
+///     "insert_user": null,
+///     "update_date": "2023-06-20T07:13:56.285Z",
+///     "update_user": null,
+///     "delete_flag": null,
+///     "delete_date": null,
+///     "delete_user": null,
+///     "active_flg": 1,
+///     "attendance_id": 36,
+///     "shift_id": 14,
+///     "employee_id": 1212,
+///     "isNextDay": true,
+///     "isClosed": false,
+///     "clock_in": "2023-06-19T12:18:30.519Z",
+///     "clock_out": null
+///   },
+///   "clock_in_flag": false,
+///   "clock_out_flag": false,
+///   "ids": [
+///     123,
+///     456,
+///     789
+///   ],
+///   "employees": [
+///     {
+///       "fullname": "Budi Budianto"
+///     }
+///   ]
+/// }
+class Dummy extends Equatable {
   final String? code;
   final String? message;
-  final Data? data;
-  final Alt? alt;
+  final DummyData? data;
+  final DummyAlt? alt;
   final bool? clockInFlag;
   final bool? clockOutFlag;
   final List<int>? ids;
-  final List<Employee>? employees;
+  final List<DummyEmployee>? employees;
 
-  const Root$({
+  const Dummy({
     required this.code,
     required this.message,
     required this.data,
@@ -21,17 +73,18 @@ class Root$ extends Equatable {
     required this.employees,
   });
 
-  factory Root$.fromJson(Map json) {
-    return Root$(
+  factory Dummy.fromJson(Map json) {
+    return Dummy(
       code: json["code"],
       message: json["message"],
-      data: Data.fromJson(json["data"] ?? {}),
-      alt: Alt.fromJson(json["alt"] ?? {}),
+      data: DummyData.fromJson(json["data"] ?? {}),
+      alt: DummyAlt.fromJson(json["alt"] ?? {}),
       clockInFlag: json["clock_in_flag"],
       clockOutFlag: json["clock_out_flag"],
-      ids: (json["ids"] ?? []).map((e) => e as int).toList(),
-      employees:
-          (json["employees"] ?? []).map((e) => Employee.fromJson(e)).toList(),
+      ids: (json["ids"] as List?)?.map((e) => e as int).toList(),
+      employees: (json["employees"] as List?)
+          ?.map((e) => DummyEmployee.fromJson(e))
+          .toList(),
     );
   }
 
@@ -43,22 +96,22 @@ class Root$ extends Equatable {
       "alt": alt?.toJson(),
       "clock_in_flag": clockInFlag,
       "clock_out_flag": clockOutFlag,
-      "ids": ids,
+      "ids": ids?.map((e) => e).toList(),
       "employees": employees?.map((e) => e.toJson()).toList(),
     };
   }
 
-  Root$ copyWith({
+  Dummy copyWith({
     String? code,
     String? message,
-    Data? data,
-    Alt? alt,
+    DummyData? data,
+    DummyAlt? alt,
     bool? clockInFlag,
     bool? clockOutFlag,
     List<int>? ids,
-    List<Employee>? employees,
+    List<DummyEmployee>? employees,
   }) {
-    return Root$(
+    return Dummy(
       code: code ?? this.code,
       message: message ?? this.message,
       data: data ?? this.data,
@@ -71,24 +124,21 @@ class Root$ extends Equatable {
   }
 
   @override
-  bool get stringify => true;
-
-  @override
   List<Object?> get props {
     return [
       code,
       message,
-      data,
-      alt,
+      ...(data?.props ?? []),
+      ...(alt?.props ?? []),
       clockInFlag,
       clockOutFlag,
-      ...(ids ?? []),
-      ...(employees ?? []),
+      ...(ids ?? []).map((e) => [e]).expand((e) => e).toList(),
+      ...(employees ?? []).map((e) => e.props).expand((e) => e).toList(),
     ];
   }
 }
 
-class Data extends Equatable {
+class DummyData extends Equatable {
   final DateTime? insertDate;
   final dynamic insertUser;
   final DateTime? updateDate;
@@ -105,7 +155,7 @@ class Data extends Equatable {
   final DateTime? clockIn;
   final dynamic clockOut;
 
-  const Data({
+  const DummyData({
     required this.insertDate,
     required this.insertUser,
     required this.updateDate,
@@ -123,8 +173,8 @@ class Data extends Equatable {
     required this.clockOut,
   });
 
-  factory Data.fromJson(Map json) {
-    return Data(
+  factory DummyData.fromJson(Map json) {
+    return DummyData(
       insertDate: DateTime.tryParse(json["insert_date"] ?? ""),
       insertUser: json["insert_user"],
       updateDate: DateTime.tryParse(json["update_date"] ?? ""),
@@ -163,7 +213,7 @@ class Data extends Equatable {
     };
   }
 
-  Data copyWith({
+  DummyData copyWith({
     DateTime? insertDate,
     dynamic insertUser,
     DateTime? updateDate,
@@ -180,7 +230,7 @@ class Data extends Equatable {
     DateTime? clockIn,
     dynamic clockOut,
   }) {
-    return Data(
+    return DummyData(
       insertDate: insertDate ?? this.insertDate,
       insertUser: insertUser ?? this.insertUser,
       updateDate: updateDate ?? this.updateDate,
@@ -200,14 +250,11 @@ class Data extends Equatable {
   }
 
   @override
-  bool get stringify => true;
-
-  @override
   List<Object?> get props {
     return [
-      insertDate,
+      insertDate?.toIso8601String(),
       insertUser,
-      updateDate,
+      updateDate?.toIso8601String(),
       updateUser,
       deleteFlag,
       deleteDate,
@@ -218,13 +265,13 @@ class Data extends Equatable {
       employeeId,
       isNextDay,
       isClosed,
-      clockIn,
+      clockIn?.toIso8601String(),
       clockOut,
     ];
   }
 }
 
-class Alt extends Equatable {
+class DummyAlt extends Equatable {
   final DateTime? insertDate;
   final dynamic insertUser;
   final DateTime? updateDate;
@@ -241,7 +288,7 @@ class Alt extends Equatable {
   final DateTime? clockIn;
   final dynamic clockOut;
 
-  const Alt({
+  const DummyAlt({
     required this.insertDate,
     required this.insertUser,
     required this.updateDate,
@@ -259,8 +306,8 @@ class Alt extends Equatable {
     required this.clockOut,
   });
 
-  factory Alt.fromJson(Map json) {
-    return Alt(
+  factory DummyAlt.fromJson(Map json) {
+    return DummyAlt(
       insertDate: DateTime.tryParse(json["insert_date"] ?? ""),
       insertUser: json["insert_user"],
       updateDate: DateTime.tryParse(json["update_date"] ?? ""),
@@ -299,7 +346,7 @@ class Alt extends Equatable {
     };
   }
 
-  Alt copyWith({
+  DummyAlt copyWith({
     DateTime? insertDate,
     dynamic insertUser,
     DateTime? updateDate,
@@ -316,7 +363,7 @@ class Alt extends Equatable {
     DateTime? clockIn,
     dynamic clockOut,
   }) {
-    return Alt(
+    return DummyAlt(
       insertDate: insertDate ?? this.insertDate,
       insertUser: insertUser ?? this.insertUser,
       updateDate: updateDate ?? this.updateDate,
@@ -336,14 +383,11 @@ class Alt extends Equatable {
   }
 
   @override
-  bool get stringify => true;
-
-  @override
   List<Object?> get props {
     return [
-      insertDate,
+      insertDate?.toIso8601String(),
       insertUser,
-      updateDate,
+      updateDate?.toIso8601String(),
       updateUser,
       deleteFlag,
       deleteDate,
@@ -354,21 +398,21 @@ class Alt extends Equatable {
       employeeId,
       isNextDay,
       isClosed,
-      clockIn,
+      clockIn?.toIso8601String(),
       clockOut,
     ];
   }
 }
 
-class Employee extends Equatable {
+class DummyEmployee extends Equatable {
   final String? fullname;
 
-  const Employee({
+  const DummyEmployee({
     required this.fullname,
   });
 
-  factory Employee.fromJson(Map json) {
-    return Employee(
+  factory DummyEmployee.fromJson(Map json) {
+    return DummyEmployee(
       fullname: json["fullname"],
     );
   }
@@ -379,16 +423,13 @@ class Employee extends Equatable {
     };
   }
 
-  Employee copyWith({
+  DummyEmployee copyWith({
     String? fullname,
   }) {
-    return Employee(
+    return DummyEmployee(
       fullname: fullname ?? this.fullname,
     );
   }
-
-  @override
-  bool get stringify => true;
 
   @override
   List<Object?> get props {
